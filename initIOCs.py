@@ -891,13 +891,10 @@ def guided_init_iocs(manager):
     """Function that guides the user through generating a single IOC through the CLI
     """
     
-    bl_prefix       = input('Enter the IOC Prefix (without the camera specific portion ex. XF:10IDC-BI).\n> ')
-    hostname        = input('Enter the IOC server hostname.\n> ')
-    engineer        = input('Enter your name and contact information.\n> ')
-    ca_address_ip   = input('Enter the Channel Address subnet IP.\n> ')
-
     another_ioc = True
     while another_ioc:
+
+        # Ask for driver type
         driver_type = None
         while driver_type is None:
             driver_type = input('What driver type would you like to generate?\n> ')
@@ -920,10 +917,14 @@ def guided_init_iocs(manager):
                 valid = True
 
         # Ask for camera specific information
-        dev_prefix  = input('Please enter the device specific portion of the PV prefix (ex. {BlackFly-Cam:1})\n> ')
-        asyn_port   = input('What asyn port should the IOC use? (ex. PS1).\n> ')
-        ioc_port    = input('What telnet port should procServer use to run the IOC? (ex. 4000)\n> ')
-        connection  = input('Enter the connection parameter for your device. (ex. IP, serial number etc.) Enter NA if not sure.\n> ')
+        hostname        = input('\nEnter the IOC server hostname.\n> ')
+        engineer        = input('\nEnter your name and contact information.\n> ')
+        ca_address_ip   = input('\nEnter EPICS_CA_ADDR_LIST IP.\n> ')
+        bl_prefix       = input('\nEnter the beamline prefix (without the camera specific portion ex. XF:10IDC-BI).\n> ')
+        dev_prefix      = input('\nPlease enter the device specific portion of the PV prefix (ex. {BlackFly-Cam:1})\n> ')
+        asyn_port       = input('\nWhat asyn port should the IOC use? (ex. PS1).\n> ')
+        ioc_port        = input('\nWhat telnet port should procServer use to run the IOC? (ex. 4000)\n> ')
+        connection      = input('\nEnter the connection parameter for your device. (ex. IP, serial number etc.) Enter NA if not sure.\n> ')
         
         # Generate a Data model IOCAction object, and initialize its environment.
         ioc_action = IOCAction(driver_type, ioc_name, bl_prefix, dev_prefix, asyn_port, ioc_port, connection)
@@ -988,7 +989,7 @@ def parse_args():
     parser.add_argument('-c', '--configure',        action='store_true', help='Add this flag to use a run initIOCs given a CONFIGURE file.')
     parser.add_argument('-p', '--setlibrarypath',   action='store_true', help='This flag should be added to set library path before startup script is run.')
     parser.add_argument('-t', '--template',         action='store_true', help='This flag will tell initIOC to use an st.cmd template. These are more likely to process without error, but may be somewhat out of date.')
-    parser.add_argument('-l', '--links',            action='store_true', help='Add this flag if you would like initIOC to create copies of required helper files instead of links.')
+    parser.add_argument('-l', '--links',            action='store_true', help='Add this flag if you would like initIOC to create links to required helper files instead of copies.')
     parser.add_argument('-m', '--minimal',          action='store_true', help='This flag specifies if initIOC should attempt to generate a minimal IOC. May result in some missing files that will need manual tweaks.')
     parser.add_argument('-s', '--searchbundle',     help='Add this flag, followed by a path to a binary bundle to get a list of driver executables that are included.')
     arguments = vars(parser.parse_args())
